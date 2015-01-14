@@ -45,8 +45,9 @@ var patterns = [];
 
 function allAlive(){
   for (var i = 0; i < 5; i++){
-    patterns[i] = [colorDict[alive], colorDict[alive]];
+    patterns[i] = [colorDict['alive'], colorDict['alive']];
   }
+  console.log(patterns);
 }
 
 
@@ -55,9 +56,10 @@ function allAlive(){
 function waning(waningPixel){
   for (var i = 0; i < 5; i++){
     (i % 2) ? 
-      (patterns[i] = [colorDict[alive], colorDict[alive]]) : 
-      (patterns[i] = [colorDict[wavering], colorDict[alive]]);
+      (patterns[i] = [colorDict['wavering'], colorDict['alive']]) : 
+      (patterns[i] = [colorDict['alive'], colorDict['alive']]);
   }
+  console.log(patterns);
 }
 
 
@@ -66,13 +68,15 @@ function waning(waningPixel){
 function dead(deadPixel){
   for (var i = 0; i < 5; i++){
     (i % 4) ? 
-      (patterns[i] = [colorDict[alive], colorDict[alive]]) : 
-      (patterns[i] = [colorDict[dead], colorDict[alive]]);
+      (patterns[i] = [colorDict['dead'], colorDict['alive']]) : 
+      (patterns[i] = [colorDict['wavering'], colorDict['alive']]);
+    }
+    console.log(patterns);
 }  
 
 function generatePattern(timer){
 
-  switch(timer){
+  switch(true){
     case (timer < 10000):
       allAlive();
       break;
@@ -89,10 +93,12 @@ function generatePattern(timer){
       console.log('Timer error, no match found');
   }
 
-  animationOne.setPattern([patterns[0]]);
-  animationTwo.setPattern([patterns[1]]);
-  animationThree.setPattern([patterns[2]]);
-  animationFour.setPattern([patterns[3]]);
+  console.log(patterns[0])
+
+  animationOne.setPattern(patterns[0]);
+  animationTwo.setPattern(patterns[1]);
+  animationThree.setPattern(patterns[2]);
+  animationFour.setPattern(patterns[3]);
 }
 
 
@@ -105,18 +111,18 @@ function animatePixels(){
   generatePattern(timer);
 
   npx.enqueue(animationOne,1000)
-     .enqueue(flicker, 100)
+     .enqueue(flicker, 50)
      .enqueue(animationTwo, 1000)
-     .enqueue(flicker, 100)
+     .enqueue(flicker, 50)
      .enqueue(animationThree,1000)
-     .enqueue(flicker, 100)
+     .enqueue(flicker, 50)
      .enqueue(animationFour,1000)
      .run();
 };
 
-// setImmediate(animatePixels);
+setImmediate(animatePixels);
 
 // it's likely still that the interval will be offset with the enqueue interval 
 // but that is desirable in this case
 
-setInterval(animatePixels, 4500);
+setInterval(animatePixels, 5000);
