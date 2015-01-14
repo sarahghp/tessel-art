@@ -8,8 +8,9 @@ var patterns = [[], [], [], [], []]; // one spot for each animation
 var pins = (function generatePins(){
   
   // Pin constuctor
-  function Pin(port){
+  function Pin(port, reason){
     this.pin = tessel.port['GPIO'].digital[port];
+    this.reason = reason;
     this.startTime = +new Date();
     this.timer = 0;
 
@@ -28,8 +29,8 @@ var pins = (function generatePins(){
   }
 
   // Create array
-  var pinOne = new Pin(2), // G3
-      pinTwo = new Pin(1), // G2
+  var pinOne = new Pin(2, 'curiosity'), // G3
+      pinTwo = new Pin(1, 'recommendation'), // G2
       arr = [pinOne, pinTwo]; 
 
   // Set on-rise
@@ -57,48 +58,54 @@ var animation = npx.newAnimation(5), // initialized with number of animation fra
 
 
 var colorDict = {
-  alive: '#00A775', // eventually reasons[reason] > color
-  wavering: '#ff4d58', // eventually programmatically reduce
-  dead: '#000000'
+  dead: '#000000',
+  curiosity:{
+    alive: '#00A775',
+    wavering: '#ff4d58', // eventually programmatically reduce
+  },
+  recommendation: {
+    alive: '#2b85d4',
+    wavering: '#ed6d4a', // eventually programmatically reduce
+  }
 };
 
 
 
-function allAlive(){
+function allAlive(reason, pixel){
   for (var i = 0; i < 5; i++){
-    patterns[i] = [colorDict['alive'], colorDict['alive']];
+    patterns[i][pixel] = colorDict[reason]['alive'];
   }
 }
 
-function waning(waningPixel){
+function waning(reason, waningPixel){
   for (var i = 0; i < 5; i++){
     (i % 2) ? 
-      (patterns[i][waningPixel] = colorDict['wavering']) : 
-      (patterns[i][waningPixel] = colorDict['alive']);
+      (patterns[i][waningPixel] = colorDict[reason]['wavering']) : 
+      (patterns[i][waningPixel] = colorDict[reason]['alive']);
   }
 }
 
-function dead(deadPixel){
+function dead(reason, deadPixel){
   for (var i = 0; i < 5; i++){
     (i % 4) ? 
       (patterns[i][deadPixel] = colorDict['dead']) : 
-      (patterns[i][deadPixel] = colorDict['wavering']);
+      (patterns[i][deadPixel] = colorDict[reason]['wavering']);
     }
 }  
 
-function generatePattern(timer, pixel){
+function generatePattern(timer, pixel, reason){
 
   switch(true){
     case (timer < 10000):
-      allAlive();
+      allAlive(reason, pixel);
       break;
 
     case (timer < 60000):
-      waning(pixel);
+      waning(reason, pixel);
       break;
 
     case (timer >= 60000):
-      dead(pixel);
+      dead(reason, pixel);
       break;
 
     default: 
@@ -113,7 +120,7 @@ function animatePixels(){
 
   pins.forEach(function(el, index){
     el.checkTime(now);
-    generatePattern(el.timer, index);
+    generatePattern(el.timer, index, el.reason);
   });
 
   animationOne.setPattern(patterns[0]);
