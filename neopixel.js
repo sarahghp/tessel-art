@@ -4,7 +4,6 @@ var tessel = require('tessel'),
 
 var patterns = [[], [], [], [], []]; // one spot for each animation
 
-
 var pins = (function generatePins(){
   
   // Pin constuctor
@@ -15,7 +14,8 @@ var pins = (function generatePins(){
     this.timer = 0;
 
     this.setLow = function(){
-      this.pin.output[0];
+      this.pin.output(0);
+      console.log('In Low:', this.pin.read());
     }
 
     this.checkTime = function(now){
@@ -30,12 +30,13 @@ var pins = (function generatePins(){
 
   // Create array
   var pinOne = new Pin(2, 'curiosity'), // G3
-      pinTwo = new Pin(1, 'recommendation'), // G2
+      pinTwo = new Pin(4, 'recommendation'), // G5
       arr = [pinOne, pinTwo]; 
 
   // Set on-rise
   (function setPins(arr){
     arr.forEach(function(el){
+      el.setLow();
       el['pin'].on('rise', function(){
         this.startTime = +new Date();
       });
@@ -45,7 +46,6 @@ var pins = (function generatePins(){
   return arr;
 
 })();
-
 
 // Neopixel code
 
@@ -71,7 +71,7 @@ var colorDict = {
 
 
 
-function allAlive(reason, pixel){
+function alive(reason, pixel){
   for (var i = 0; i < 5; i++){
     patterns[i][pixel] = colorDict[reason]['alive'];
   }
@@ -91,13 +91,22 @@ function dead(reason, deadPixel){
       (patterns[i][deadPixel] = colorDict['dead']) : 
       (patterns[i][deadPixel] = colorDict[reason]['wavering']);
     }
-}  
+}
+
+function off(pixel){
+  for (var i = 0; i < 5; i++){
+    patterns[i][pixel] = colorDict['dead'];
+  }
+} 
 
 function generatePattern(timer, pixel, reason){
 
   switch(true){
+    case (timer === 0):
+      off(pixel);
+      break;
     case (timer < 10000):
-      allAlive(reason, pixel);
+      alive(reason, pixel);
       break;
 
     case (timer < 60000):
@@ -121,6 +130,7 @@ function animatePixels(){
   pins.forEach(function(el, index){
     el.checkTime(now);
     generatePattern(el.timer, index, el.reason);
+    console.log(index, ' : ', el.pin.read());
   });
 
   animationOne.setPattern(patterns[0]);
