@@ -54,15 +54,15 @@ var animation = npx.newAnimation(5), // initialized with number of animation fra
 
 
 var colorDict = {
-  dying: '#222280',
-  dead: '#000001',
+  dying: '#313149',
+  dead: '#000010',
   curiosity:{
     alive: '#00A775',
     wavering: '#313149', // eventually programmatically reduce
   },
   recommendation: {
     alive: '#9d252d',
-    wavering: '#313149', // eventually programmatically reduce
+    wavering: '#313149', // eventually programmatically reduce (#222280)
   }
 };
 
