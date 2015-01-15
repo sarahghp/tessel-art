@@ -2,6 +2,11 @@ var tessel = require('tessel'),
     Npx = require('npx'),
     npx = new Npx(2);
 
+var pubnub = require("pubnub").init({
+  publish_key: "pub-c-09f2fc82-1e55-478c-a93d-f0d7265ee647", 
+  subscribe_key: "sub-c-e9a1c52e-9ab9-11e4-a626-02ee2ddab7fe" 
+});
+
 var patterns = [[], [], [], [], []]; // one spot for each animation
 
 var pins = (function generatePins(){
@@ -70,6 +75,7 @@ var colorDict = {
 
 function alive(reason, pixel){
   console.log('Alive', pixel);
+  pubnub.publish({channel: "book-message", message: "Book is alive!"});
   for (var i = 0; i < 5; i++){
     patterns[i][pixel] = colorDict[reason]['alive'];
   }
@@ -77,6 +83,7 @@ function alive(reason, pixel){
 
 function waning(reason, waningPixel){
   console.log('Waning', pixel);
+  pubnub.publish({channel: "book-message", message: "Book is waning! Reeeead."});
   for (var i = 0; i < 5; i++){
     (i % 2) ? 
       (patterns[i][waningPixel] = colorDict[reason]['wavering']) : 
@@ -86,6 +93,7 @@ function waning(reason, waningPixel){
 
 function dying(reason, deadPixel){
   console.log('Dying', pixel);
+  pubnub.publish({channel: "book-message", message: "Book is dying! You monster!"});
   for (var i = 0; i < 5; i++){
     (i % 4) ? 
       (patterns[i][deadPixel] = colorDict['dying']) : 
@@ -95,6 +103,7 @@ function dying(reason, deadPixel){
 
 function dead(reason, deadPixel){
   console.log('Dead', pixel);
+  pubnub.publish({channel: "book-message", message: "Book is dead! RIP"});
   for (var i = 0; i < 5; i++){
     var rand = Math.floor(Math.random() * 10);
     (rand < 8 ) ? 
@@ -146,8 +155,6 @@ function animatePixels(){
     generatePattern(el.timer, index, el.reason);
     console.log(index, ' : ', el.pin.rawRead());
   });
-
-  // console.log(patterns);
 
   animationOne.setPattern(patterns[0]);
   animationTwo.setPattern(patterns[1]);
