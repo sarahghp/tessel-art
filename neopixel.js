@@ -54,14 +54,15 @@ var animation = npx.newAnimation(5), // initialized with number of animation fra
 
 
 var colorDict = {
+  dying: '#222280',
   dead: '#000001',
   curiosity:{
     alive: '#00A775',
-    wavering: '#ff4d58', // eventually programmatically reduce
+    wavering: '#313149', // eventually programmatically reduce
   },
   recommendation: {
-    alive: '#3d9e00',
-    wavering: '#9e0096', // eventually programmatically reduce
+    alive: '#9d252d',
+    wavering: '#313149', // eventually programmatically reduce
   }
 };
 
@@ -83,12 +84,22 @@ function waning(reason, waningPixel){
   }
 }
 
+function dying(reason, deadPixel){
+  console.log('Dying', pixel);
+  for (var i = 0; i < 5; i++){
+    (i % 4) ? 
+      (patterns[i][deadPixel] = colorDict['dying']) : 
+      (patterns[i][deadPixel] = colorDict[reason]['alive']);
+    }
+}
+
 function dead(reason, deadPixel){
   console.log('Dead', pixel);
   for (var i = 0; i < 5; i++){
-    (i % 4) ? 
+    var rand = Math.floor(Math.random() * 10);
+    (rand < 8 ) ? 
       (patterns[i][deadPixel] = colorDict['dead']) : 
-      (patterns[i][deadPixel] = colorDict[reason]['wavering']);
+      (patterns[i][deadPixel] = colorDict[reason]['alive']);
     }
 }
 
@@ -108,8 +119,12 @@ function generatePattern(timer, pixel, reason){
       alive(reason, pixel);
       break;
 
-    case (timer < 60000):
+    case (timer < 30000):
       waning(reason, pixel);
+      break;
+
+    case (timer < 60000):
+      dying(reason, pixel);
       break;
 
     case (timer >= 60000):
@@ -139,13 +154,13 @@ function animatePixels(){
   animationThree.setPattern(patterns[2]);
   animationFour.setPattern(patterns[3]);
 
-  npx.enqueue(animationOne,1000)
-     .enqueue(flicker, 50)
+  npx.enqueue(animationOne,2000)
+     .enqueue(flicker, 500)
      .enqueue(animationTwo, 1000)
-     .enqueue(flicker, 50)
-     .enqueue(animationThree,1000)
-     .enqueue(flicker, 50)
-     .enqueue(animationFour,1000)
+     .enqueue(flicker, 1000)
+     .enqueue(animationThree,2000)
+     .enqueue(flicker, 1000)
+     .enqueue(animationFour,3000)
      .run();
 };
 
@@ -155,4 +170,4 @@ setImmediate(animatePixels);
 // it's likely still that the interval will be offset with the enqueue interval 
 // but that is desirable in this case
 
-setInterval(animatePixels, 5000);
+setInterval(animatePixels, 10500);
