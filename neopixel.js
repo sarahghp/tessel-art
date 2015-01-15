@@ -114,7 +114,7 @@ function dead(reason, deadPixel){
 
 function off(pixel){
   for (var i = 0; i < 5; i++){
-    patterns[i][pixel] = colorDict['dead'];
+    patterns[i][pixel] = '#000001';
   }
 } 
 
@@ -124,19 +124,19 @@ function generatePattern(timer, pixel, reason){
     case (timer === 0):
       off(pixel);
       break;
-    case (timer < 10000):
+    case (timer < 30000):
       alive(reason, pixel);
       break;
 
-    case (timer < 30000):
+    case (timer < 50000):
       waning(reason, pixel);
       break;
 
-    case (timer < 60000):
+    case (timer < 100000):
       dying(reason, pixel);
       break;
 
-    case (timer >= 60000):
+    case (timer >= 100000):
       dead(reason, pixel);
       break;
 
