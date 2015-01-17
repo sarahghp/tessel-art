@@ -40,7 +40,7 @@ var pins = (function generatePins(){
       el['pin'].on('rise', function(){
         this.startTime = +new Date();
       });
-      el['pin'].output(0);
+      el['pin'].pull(pulldown);
     });
   })(arr);
 
