@@ -141,7 +141,7 @@ function generatePattern(timer, pixel, reason){
       break;
 
     default: 
-      console.log('Timer error, no match found');
+      console.warn('Timer error, no match found');
   }
 }
 
