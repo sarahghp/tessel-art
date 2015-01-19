@@ -2,6 +2,8 @@ function calibrate(modDotMeth){
   var highest = 0,
       lowest = 1;
 
+  console.log(modDotMeth.toString());
+
   function callback(err, data){
     console.log('called');
     if (err){
@@ -18,7 +20,7 @@ function calibrate(modDotMeth){
 
   }
 
-   modDotMeth(callback);
+   (modDotMeth)(callback);
 
 }
 
