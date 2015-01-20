@@ -3,7 +3,6 @@ function calibrate(mod, meth, userCall){
       lowest = 1;
 
   function callback(err, data){
-    console.log('called');
     if (err){
         console.error(err);
     }
