@@ -16,6 +16,8 @@ function set(mod, meth, bufferFlag){
       reject(Error("Promise failed"));
     });
 
+    console.log('DC called', calibrate);
+
     return calibrate;
   }
 
@@ -26,7 +28,6 @@ function set(mod, meth, bufferFlag){
 
   function getData(){
     if (buffer) {
-      console.log(meth, mod);
       return mod[meth].call(mod, dataCall);
     } else {
       return mod[meth].call(mod, pushData);
