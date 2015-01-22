@@ -3,15 +3,16 @@ var tessel = require('tessel'),
     ambient = ambientlib.use(tessel.port['A']),
     calibrate = require('./util/calibrate');
 
-var soundHigh, soundLow;
+// var soundHigh, soundLow;
 
-function userCall(low, high) {
-  soundLow = low;
-  soundHigh = high;
-  console.log(soundLow, soundHigh);
-}
+// function userCall(low, high) {
+//   soundLow = low;
+//   soundHigh = high;
+//   console.log(soundLow, soundHigh);
+// }
 
 ambient.on('ready', function(){
-  calibrate.set(ambient, 'getSoundBuffer', userCall);
+  var test = calibrate.set(ambient, 'getSoundBuffer');
+  console.log(test);
 });
 
