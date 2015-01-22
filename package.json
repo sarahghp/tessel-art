@@ -1,0 +1,20 @@
+{
+  "name": "tessel",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "accel-mma84": "^0.2.3",
+    "ble-ble113a": "^0.1.12",
+    "climate-si7020": "^0.1.1",
+    "npx": "^0.1.5",
+    "pubnub": "^3.7.8",
+    "q": "^1.1.2",
+    "rsvp": "^3.0.16"
+  }
+}
