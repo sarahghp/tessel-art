@@ -6,13 +6,17 @@ function set(mod, meth, bufferFlag){
       lowest = 1,
       buffer = bufferFlag || true;
 
-       console.log(meth, bufferFlag, buffer);
-
   function dataCall(err, data){
     if (err){
       console.log(err);
     } 
-    return data;
+
+    var calibrate = new RSVP.Promise(function(resolve, reject){
+      resolve(data);
+      reject(Error("Promise failed"));
+    });
+
+    return calibrate;
   }
 
 
@@ -22,8 +26,8 @@ function set(mod, meth, bufferFlag){
 
   function getData(){
     if (buffer) {
-      console.log('called');
-      return mod[meth].call(mod, dataCall); // use return instead of fetchedData to hold?
+      console.log(meth, mod);
+      return mod[meth].call(mod, dataCall);
     } else {
       return mod[meth].call(mod, pushData);
     }
@@ -37,18 +41,11 @@ function set(mod, meth, bufferFlag){
     return { 'high': highest, 'low': lowest }
   }
 
-  var calibrate = new RSVP.Promise(function(resolve, reject){
-    var arr = getData();
-    console.log(arr);
-    resolve(arr);
-    reject(Error("Promise failed"));
-  });
-
-  return calibrate
-        .then(threshold(val))
-        .catch(function(err){
-          console.log("Error: ", err);
-        });
+  getData()
+    .then(threshold)
+    .catch(function(err){
+      console.log("Error: ", err);
+    });
 }
 
 exports.set = set;
