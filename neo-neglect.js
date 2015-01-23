@@ -75,7 +75,7 @@ var colorDict = {
 
 function alive(reason, pixel){
   console.log('Alive', pixel);
-  pubnub.publish({channel: "book-message", message: "Book is alive!"});
+  pubnub.publish({channel: "book-message", error: function(){console.log("Pubnub error")}, message: "Book is alive!"});
   for (var i = 0; i < 5; i++){
     var rand = Math.random() * 10;
     (rand < 9.5) ?
@@ -86,7 +86,7 @@ function alive(reason, pixel){
 
 function waning(reason, waningPixel){
   console.log('Waning', pixel);
-  pubnub.publish({channel: "book-message", message: "Book is waning! Reeeead."});
+  pubnub.publish({channel: "book-message", error: function(){console.log("Pubnub error")}, message: "Book is waning! Reeeead."});
   for (var i = 0; i < 5; i++){
     var rand = Math.random() * 10;
     (rand < 7) ? 
@@ -97,7 +97,7 @@ function waning(reason, waningPixel){
 
 function dying(reason, deadPixel){
   console.log('Dying', pixel);
-  pubnub.publish({channel: "book-message", message: "Book is dying! You monster!"});
+  pubnub.publish({channel: "book-message", error: function(){console.log("Pubnub error")}, message: "Book is dying! You monster!"});
   for (var i = 0; i < 5; i++){
     var rand = Math.random() * 10;
     (rand < 7.2) ? 
@@ -108,7 +108,7 @@ function dying(reason, deadPixel){
 
 function dead(reason, deadPixel){
   console.log('Dead', pixel);
-  pubnub.publish({channel: "book-message", message: "Book is dead! RIP"});
+  pubnub.publish({channel: "book-message", error: function(){console.log("Pubnub error")}, message: "Book is dead! RIP"});
   for (var i = 0; i < 5; i++){
     var rand = Math.random() * 10;
     (rand < 7) ? 
@@ -166,10 +166,10 @@ function animatePixels(){
   animationThree.setPattern(patterns[2]);
   animationFour.setPattern(patterns[3]);
 
-  npx.enqueue(animationOne,   50)
-     .enqueue(animationTwo,   50)
-     .enqueue(animationThree, 50)
-     .enqueue(animationFour,  50)
+  npx.enqueue(animationOne,   500)
+     .enqueue(animationTwo,   500)
+     .enqueue(animationThree, 500)
+     .enqueue(animationFour,  500)
      .run();
 };
 
@@ -179,4 +179,4 @@ setImmediate(animatePixels);
 // it's likely still that the interval will be offset with the enqueue interval 
 // but that is desirable in this case
 
-setInterval(animatePixels, 220);
+setInterval(animatePixels, 2200);
