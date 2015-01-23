@@ -9,6 +9,7 @@
   "author": "Sarah GP",
   "license": "ISC",
   "dependencies": {
+    "pubnub": "^3.7.8",
     "servo-pca9685": "^0.1.3"
   }
 }
