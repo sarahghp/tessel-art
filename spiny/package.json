@@ -1,0 +1,14 @@
+{
+  "name": "spiny",
+  "version": "0.0.0",
+  "description": "Spiny Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Sarah GP",
+  "license": "ISC",
+  "dependencies": {
+    "servo-pca9685": "^0.1.3"
+  }
+}
