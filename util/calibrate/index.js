@@ -4,22 +4,18 @@ function set(mod, meth, bufferFlag){
 
   var highest = 0,
       lowest = 1,
-      buffer = bufferFlag || true;
+      buffer = bufferFlag || true,
+      fetchedData;
+
+  var calibrate = new RSVP.defer();
 
   function dataCall(err, data){
     if (err){
       console.log(err);
     } 
 
-    var calibrate = new RSVP.Promise(function(resolve, reject){
-      resolve(data);
-      reject(Error("Promise failed"));
-    });
+    calibrate.resolve(data);
 
-    console.log('DC called', calibrate);
-
-
-    return calibrate;
   }
 
 
@@ -29,13 +25,14 @@ function set(mod, meth, bufferFlag){
 
   function getData(){
     if (buffer) {
-      return mod[meth].call(mod, dataCall);
+      mod[meth].call(mod, dataCall);
     } else {
-      return mod[meth].call(mod, pushData);
+      mod[meth].call(mod, pushData);
     }
   }
 
   function threshold(arr){
+    console.log('threshold called')
     for (var i = 0, l = arr.length; i < l; i++){
         (arr[i] < lowest) && (lowest = arr[i]);
         (arr[i] > highest) && (highest = arr[i]);
@@ -43,7 +40,9 @@ function set(mod, meth, bufferFlag){
     return { 'high': highest, 'low': lowest }
   }
 
-  getData()
+  var promise = calibrate.promise;
+
+  promise
     .then(threshold)
     .catch(function(err){
       console.log("Error: ", err);
