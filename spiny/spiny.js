@@ -16,7 +16,7 @@ function moveToTarget(target){
 }
 
 servo.on('ready', function () {
-  servo.configure(1, 0.05, 0.12, function () {
+  servo.configure(1, 0.05, 0.14, function () {
     moveToTarget(target);  
   });
 });
