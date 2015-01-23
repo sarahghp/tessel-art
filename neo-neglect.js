@@ -54,13 +54,13 @@ var animation = npx.newAnimation(5), // initialized with number of animation fra
     animationOne = npx.newAnimation(1),
     animationTwo = npx.newAnimation(1),
     animationThree = npx.newAnimation(1),
-    animationFour = npx.newAnimation(1),
-    flicker = npx.newAnimation(1).setAll('#000001');
+    animationFour = npx.newAnimation(1);
 
 
 var colorDict = {
   dying: '#313149',
   dead: '#000010',
+  flicker: '#000001',
   curiosity:{
     alive: '#00A775',
     wavering: '#313149', // eventually programmatically reduce
@@ -77,7 +77,10 @@ function alive(reason, pixel){
   console.log('Alive', pixel);
   pubnub.publish({channel: "book-message", message: "Book is alive!"});
   for (var i = 0; i < 5; i++){
-    patterns[i][pixel] = colorDict[reason]['alive'];
+    var rand = Math.random() * 10;
+    (rand < 9.5) ?
+      (patterns[i][pixel] = colorDict[reason]['alive']) :
+      (patterns[i][pixel] = colorDict['flicker']);
   }
 }
 
@@ -85,7 +88,8 @@ function waning(reason, waningPixel){
   console.log('Waning', pixel);
   pubnub.publish({channel: "book-message", message: "Book is waning! Reeeead."});
   for (var i = 0; i < 5; i++){
-    (i % 2) ? 
+    var rand = Math.random() * 10;
+    (rand < 7) ? 
       (patterns[i][waningPixel] = colorDict[reason]['wavering']) : 
       (patterns[i][waningPixel] = colorDict[reason]['alive']);
   }
@@ -95,7 +99,8 @@ function dying(reason, deadPixel){
   console.log('Dying', pixel);
   pubnub.publish({channel: "book-message", message: "Book is dying! You monster!"});
   for (var i = 0; i < 5; i++){
-    (i % 4) ? 
+    var rand = Math.random() * 10;
+    (rand < 7.2) ? 
       (patterns[i][deadPixel] = colorDict['dying']) : 
       (patterns[i][deadPixel] = colorDict[reason]['alive']);
     }
@@ -105,8 +110,8 @@ function dead(reason, deadPixel){
   console.log('Dead', pixel);
   pubnub.publish({channel: "book-message", message: "Book is dead! RIP"});
   for (var i = 0; i < 5; i++){
-    var rand = Math.floor(Math.random() * 10);
-    (rand < 8 ) ? 
+    var rand = Math.random() * 10;
+    (rand < 7) ? 
       (patterns[i][deadPixel] = colorDict['dead']) : 
       (patterns[i][deadPixel] = colorDict[reason]['alive']);
     }
@@ -161,13 +166,10 @@ function animatePixels(){
   animationThree.setPattern(patterns[2]);
   animationFour.setPattern(patterns[3]);
 
-  npx.enqueue(animationOne,2000)
-     .enqueue(flicker, 500)
-     .enqueue(animationTwo, 1000)
-     .enqueue(flicker, 1000)
-     .enqueue(animationThree,2000)
-     .enqueue(flicker, 1000)
-     .enqueue(animationFour,3000)
+  npx.enqueue(animationOne,   50)
+     .enqueue(animationTwo,   50)
+     .enqueue(animationThree, 50)
+     .enqueue(animationFour,  50)
      .run();
 };
 
@@ -177,4 +179,4 @@ setImmediate(animatePixels);
 // it's likely still that the interval will be offset with the enqueue interval 
 // but that is desirable in this case
 
-setInterval(animatePixels, 10500);
+setInterval(animatePixels, 220);
