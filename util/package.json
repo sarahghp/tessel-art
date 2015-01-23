@@ -1,0 +1,15 @@
+{
+  "name": "tessel",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ambient-attx4": "^0.2.4",
+    "rsvp": "^3.0.16"
+  }
+}
