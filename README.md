@@ -1,6 +1,6 @@
 # Tessel Art Experiments
 
-Creating “relatables” for Tessel in preparation for ForwardJS 2 (and the rest of my life).
+Creating “relatables” for Tessel in preparation for ForwardJS 2, Art Hack, and the rest of my life.
 
 ## Summaries
 
