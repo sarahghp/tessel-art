@@ -18,8 +18,8 @@ function moveToTarget(target){
     for (var i = init, t = target; i < t; i += 0.05){
       (function(j){
         setTimeout(function move(){
-          console.log('Position:', j);
-          servo.move(1, j);
+          console.log('Position:', 1-j);
+          servo.move(1, 1-j);
         }, j * 10000);
       })(i);
     }    
