@@ -13,33 +13,35 @@ var pubnub = require("pubnub").init({
 var target = 0,
     init = 0;
 
+// These colors make no sense because the pixel is being illogical & I can't figure out why.
+
 var colorDict = {
-  'inert': '#0028b8',
-  'low': '#00A775',
-  'medium': '#ff9100',
-  'high': '#b60c17'
+  'inert':  '#0000bb',  // should show blue
+  'low':    '#ff588a',  // should show green
+  'medium': '#00a775',  // should show orange
+  'high':   '#00dd00'   // should show red
 };
 
 function setLED(target){
   console.log('set LED called');
   switch(true){
     case (Math.abs(target) < 0.1):
-      console.log('Inert called');
+      console.log('Inert called', colorDict.inert);
       animation.setAll(colorDict.inert);
       break;
 
     case (target < 3):
-      console.log('Low called');
+      console.log('Low called', colorDict.low);
       animation.setAll(colorDict.low);
       break;
 
     case (target < 5):
-      console.log('Medium called');
+      console.log('Medium called', colorDict.medium);
       animation.setAll(colorDict.medium);
       break;
 
     case (target > 5):
-      console.log('High called');
+      console.log('High called', colorDict.high);
       animation.setAll(colorDict.high);
       break;
 
