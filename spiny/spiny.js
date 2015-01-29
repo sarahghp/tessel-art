@@ -1,6 +1,9 @@
 var tessel = require('tessel'),
     servolib = require('servo-pca9685'),
-    servo = servolib.use(tessel.port['B']);
+    servo = servolib.use(tessel.port['B']),
+    Npx = require('npx'),
+    npx = new Npx(1),
+    animation = npx.newAnimation(1);
 
 var pubnub = require("pubnub").init({
   publish_key: "pub-c-09f2fc82-1e55-478c-a93d-f0d7265ee647", 
@@ -10,10 +13,44 @@ var pubnub = require("pubnub").init({
 var target = 0,
     init = 0;
 
+var colorDict = {
+  'inert': '#0028b8',
+  'low': '#00A775',
+  'medium': '#ff9100',
+  'high': '#b60c17'
+};
+
+function setLED(target){
+  console.log('set LED called');
+  switch(true){
+    case (Math.abs(target) < 0.1):
+      console.log('Inert called');
+      animation.setAll(colorDict.inert);
+      break;
+
+    case (target < 3):
+      console.log('Low called');
+      animation.setAll(colorDict.low);
+      break;
+
+    case (target < 5):
+      console.log('Medium called');
+      animation.setAll(colorDict.medium);
+      break;
+
+    case (target > 5):
+      console.log('High called');
+      animation.setAll(colorDict.high);
+      break;
+
+    default:
+      console.log('Color error, no match found');
+  }
+}
+
 function moveToTarget(target){
 
   if (target > init){
-    console.log('Before execution:', init);
       for (var i = init, t = target; i < t; i += 0.05){
         (function(j){
           setTimeout(function moveUp(){
@@ -23,7 +60,6 @@ function moveToTarget(target){
         })(i);
       } 
     init = target;
-    console.log('After move up', init);
   } else if (target < init && Math.abs(target) > 0.01) {
     for (var i = init, t = target; i > t; i -= 0.05){
       (function(j){
@@ -56,6 +92,8 @@ servo.on('ready', function () {
     message: function(m){
       console.log('Message received:', m);
       moveToTarget(+m * .1);
+      setLED(+m);
+      npx.play(animation);
     }
   });
 
