@@ -129,6 +129,7 @@ function generatePattern(timer, pixel, reason){
     case (timer === 0):
       off(pixel);
       break;
+   
     case (timer < 30000):
       alive(reason, pixel);
       break;
