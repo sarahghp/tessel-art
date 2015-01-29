@@ -18,7 +18,7 @@ function moveToTarget(target){
         (function(j){
           setTimeout(function moveUp(){
             console.log('Up Position:', 0.95-j);
-            // servo.move(1, 0.95-j);
+            servo.move(1, 0.95-j);
           }, j * 10000);
         })(i);
       } 
@@ -29,7 +29,7 @@ function moveToTarget(target){
       (function(j){
         setTimeout(function moveDown(){
           console.log('Down Position:', 0.95-j);
-          // servo.move(1, 0.95-j);
+          servo.move(1, 0.95-j);
         }, (0.95-j) * 10000);
       })(i);
     }
@@ -39,7 +39,7 @@ function moveToTarget(target){
       (function(j){
         setTimeout(function moveDown(){
           console.log('0 Position:', 0.95-j);
-          // servo.move(1, 0.95-j);
+          servo.move(1, 0.95-j);
         }, (0.95-j) * 10000);
       })(i);
     }
