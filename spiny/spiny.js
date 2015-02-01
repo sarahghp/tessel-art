@@ -18,8 +18,8 @@ var target = 0,
 var colorDict = {
   'inert':  '#0000bb',  // should show blue
   'low':    '#ff588a',  // should show green
-  'medium': '#00a775',  // should show orange
-  'high':   '#00dd00'   // should show red
+  'medium': '#00dd00',  // should show orange
+  'high':   '#00a775'   // should show red
 };
 
 function setLED(target){
