@@ -11,3 +11,11 @@ Creating “relatables” for Tessel in preparation for ForwardJS 2, Art Hack, a
 Working to bring [Timeline of Neglect](http://sarahgp.com/projects/timeline) into the real world, Neo-Neglect is powered when books on a shelf close one of the input switches. The switches connect to both the Internet and Neopixel LEDs vis a Tessel. As books go ignored, their lights slowly go out.
 
 Data writes to [here](http://sarahgp.com/timeline-tessel.html); the history clears every few days.
+
+### Spiny
+
+![image of spiny](/img/spiny2.jpg)
+
+Spiny was built to let the world know how you're feeling, before you even open your mouth.
+
+When operational, you can [control Spiny from the web](http://sarahgp.com/send-spiny).
