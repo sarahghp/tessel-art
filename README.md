@@ -19,3 +19,9 @@ Data writes to [here](http://sarahgp.com/timeline-tessel.html); the history clea
 Spiny was built to let the world know how you're feeling, before you even open your mouth.
 
 When operational, you can [control Spiny from the web](http://sarahgp.com/send-spiny).
+
+### Deluge
+
+![image of deluge](/img/deluge.jpg)
+
+Created for [Art Hack Day](http://www.arthackday.net/events/deluge), Deluge uses its motors to let you know when there is too much bluetooth about. The same code also powered "No. 6".
