@@ -42,12 +42,14 @@ function set(mod, meth, bufferFlag){
 
   getData();
 
-  promise
+  var returnValue = promise
     .then(threshold)
     .then(function(){ console.log('fetched', fetchedData); return fetchedData; })
     .catch(function(err){
       console.log("Error: ", err);
     });
+
+  return returnValue;
 }
 
 exports.set = set;
