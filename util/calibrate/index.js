@@ -2,12 +2,11 @@ var RSVP = require('rsvp');
 
 function set(mod, meth, bufferFlag){
 
-  var highest = 0,
-      lowest = 1,
-      buffer = bufferFlag || true,
-      fetchedData;
+  var buffer = bufferFlag || true,            // function returns values between 0 and 1
+      fetchedData = { high: 0, low: 1 };
 
-  var calibrate = new RSVP.defer();
+  var calibrate = new RSVP.defer(),
+      promise = calibrate.promise;
 
   function dataCall(err, data){
     console.log('data Call', err, data);
@@ -35,18 +34,17 @@ function set(mod, meth, bufferFlag){
   function threshold(arr){
     console.log('threshold called', arr)
     for (var i = 0, l = arr.length; i < l; i++){
-        (arr[i] < lowest) && (lowest = arr[i]);
-        (arr[i] > highest) && (highest = arr[i]);
-      }
-    return { 'high': highest, 'low': lowest }
+        (arr[i] < fetchedData.low) && (fetchedData.low = arr[i]);
+        (arr[i] > fetchedData.high) && (fetchedData.high = arr[i]);
+    }
   }
 
-  var promise = calibrate.promise;
 
   getData();
 
   promise
-    .then(function(val){ return threshold(val)})
+    .then(threshold)
+    .then(function(){ console.log('fetched', fetchedData); return fetchedData; })
     .catch(function(err){
       console.log("Error: ", err);
     });
