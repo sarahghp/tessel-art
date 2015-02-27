@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "ambient-attx4": "^0.2.4",
-    "rsvp": "^3.0.16"
+    "events": "^1.0.2",
+    "rsvp": "^3.0.16",
+    "util": "^0.10.3"
   }
 }
