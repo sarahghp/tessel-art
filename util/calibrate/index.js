@@ -1,8 +1,9 @@
 var RSVP = require('rsvp');
 
-function set(mod, meth, bufferFlag){
+function set(mod, meth, bufferFlag, bufferCalls){
 
-  var buffer = bufferFlag || true,            // function returns values between 0 and 1
+  var buffer = bufferFlag || false,            // function returns values between 0 and 1
+      bufferCalls = bufferCalls || 10,
       fetchedData = { high: 0, low: 1 };
 
   var calibrate = new RSVP.defer(),
@@ -16,11 +17,32 @@ function set(mod, meth, bufferFlag){
   }
 
 
-  function pushData(err, data){
-    // singleGetData promise. then push to array. then return array 
+  function pushData(num){
+    var promises = [];
+
+    function getValue(){
+      return new RSVP.Promise(function(resolve, reject){
+        mod[meth].call(mod, function(err, data){
+          if (err){
+            reject(err);
+          } else {
+            console.log('resolved', data);
+            resolve(data);
+          }
+        });
+      });
+    }
+
+    for (var i = 0; i < num; i++){
+      promises.push(getValue());
+    }
+
+    RSVP.all(promises)
+        .then(function(arr){calibrate.resolve(arr)});
   }
 
   function threshold(arr){
+    console.log('threshold called', arr);
     for (var i = 0, l = arr.length; i < l; i++){
         (arr[i] < fetchedData.low) && (fetchedData.low = arr[i]);
         (arr[i] > fetchedData.high) && (fetchedData.high = arr[i]);
@@ -29,10 +51,10 @@ function set(mod, meth, bufferFlag){
   }
 
   (function getData(){
-    if (buffer) {
-      mod[meth].call(mod, dataCall);
+    if (!buffer) {
+      mod[meth].call(mod, dataCall); // if the method returns an array, we can just call it once
     } else {
-      mod[meth].call(mod, pushData);
+      pushData(bufferCalls);                  // otherwise pushData will call repeatedly to build a buffer manually
     }
   })();
 
