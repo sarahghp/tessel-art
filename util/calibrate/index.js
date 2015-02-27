@@ -9,13 +9,10 @@ function set(mod, meth, bufferFlag){
       promise = calibrate.promise;
 
   function dataCall(err, data){
-    console.log('data Call', err, data);
     if (err){
       console.log(err);
     } 
-
     calibrate.resolve(data);
-
   }
 
 
@@ -23,33 +20,27 @@ function set(mod, meth, bufferFlag){
     // singleGetData promise. then push to array. then return array 
   }
 
-  function getData(){
+  function threshold(arr){
+    for (var i = 0, l = arr.length; i < l; i++){
+        (arr[i] < fetchedData.low) && (fetchedData.low = arr[i]);
+        (arr[i] > fetchedData.high) && (fetchedData.high = arr[i]);
+    }
+    return fetchedData;
+  }
+
+  (function getData(){
     if (buffer) {
       mod[meth].call(mod, dataCall);
     } else {
       mod[meth].call(mod, pushData);
     }
-  }
+  })();
 
-  function threshold(arr){
-    console.log('threshold called', arr)
-    for (var i = 0, l = arr.length; i < l; i++){
-        (arr[i] < fetchedData.low) && (fetchedData.low = arr[i]);
-        (arr[i] > fetchedData.high) && (fetchedData.high = arr[i]);
-    }
-  }
-
-
-  getData();
-
-  var returnValue = promise
+ return promise
     .then(threshold)
-    .then(function(){ console.log('fetched', fetchedData); return fetchedData; })
     .catch(function(err){
       console.log("Error: ", err);
     });
-
-  return returnValue;
 }
 
 exports.set = set;
