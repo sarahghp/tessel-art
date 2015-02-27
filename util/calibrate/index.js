@@ -99,5 +99,5 @@ util.inherits(Calibrate, EventEmitter);
 var calibrate = new Calibrate();
 
 
-
-exports.get = calibrate.get;
+// exports.events = new Calibrate();
+module.exports = new Calibrate();
