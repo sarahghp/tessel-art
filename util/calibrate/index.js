@@ -1,13 +1,16 @@
-//TODO: Passing args to method if necc
-//      Add event interface
+//TODO: Add event interface
 
 var RSVP = require('rsvp');
 
-function get(mod, meth, bufferFlag, bufferCalls, fetchedData){
+function get(mod, meth, options){
 
-  var notBuffer = bufferFlag || false,            
-      bufferCalls = bufferCalls || 10,
-      fetchedData = fetchedData || { high: 0, low: 1 }; // defaults to assuming function returns values between 0 and 1
+  var notBuffer   = options.returnsSingle || false,            
+      bufferCalls = options.calls || 10,
+      fetchedData = options.thresholds ?
+                    // reverse values for threshold test 
+                    { high: options.thresholds.low, low: options.thresholds.high } : 
+                    // defaults to assuming function returns values between 0 and 1
+                    { high: 0, low: 1 };
 
   var calibrate = new RSVP.defer(),
       promise = calibrate.promise;
