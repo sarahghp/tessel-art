@@ -4,7 +4,9 @@ var tessel = require('tessel'),
     calibrate = require('./calibrate');
 
 ambient.on('ready', function(){
-  console.log('Called ambient on-ready');
-  calibrate.set(ambient, 'getSoundBuffer').then(function(val){console.log(val)});
+  calibrate.get(ambient, 'getSoundBuffer')
+           .then(function(val){
+            console.log(val)
+          });
 });
 

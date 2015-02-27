@@ -1,6 +1,9 @@
+//TODO: Passing args to method if necc
+//      Add event interface
+
 var RSVP = require('rsvp');
 
-function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
+function get(mod, meth, bufferFlag, bufferCalls, fetchedData){
 
   var notBuffer = bufferFlag || false,            
       bufferCalls = bufferCalls || 10,
@@ -15,7 +18,6 @@ function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
     } 
     calibrate.resolve(data);
   }
-
 
   function pushData(num){
     var promises = [];
@@ -65,4 +67,4 @@ function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
     });
 }
 
-exports.set = set;
+exports.get = get;
