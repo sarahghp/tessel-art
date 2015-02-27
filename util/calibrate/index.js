@@ -2,9 +2,9 @@ var RSVP = require('rsvp');
 
 function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
 
-  var buffer = bufferFlag || false,            // function returns values between 0 and 1
+  var notBuffer = bufferFlag || false,            
       bufferCalls = bufferCalls || 10,
-      fetchedData = fetchedData || { high: 0, low: 1 };
+      fetchedData = fetchedData || { high: 0, low: 1 }; // defaults to assuming function returns values between 0 and 1
 
   var calibrate = new RSVP.defer(),
       promise = calibrate.promise;
@@ -51,10 +51,10 @@ function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
   }
 
   (function getData(){
-    if (!buffer) {
-      mod[meth].call(mod, dataCall); // if the method returns an array, we can just call it once
+    if (!notBuffer) {
+      mod[meth].call(mod, dataCall);   // if the method returns an array, we can just call it once
     } else {
-      pushData(bufferCalls);                  // otherwise pushData will call repeatedly to build a buffer manually
+      pushData(bufferCalls);          // otherwise pushData will call repeatedly to build a buffer manually
     }
   })();
 
