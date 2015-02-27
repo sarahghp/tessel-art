@@ -1,10 +1,10 @@
 var RSVP = require('rsvp');
 
-function set(mod, meth, bufferFlag, bufferCalls){
+function set(mod, meth, bufferFlag, bufferCalls, fetchedData){
 
   var buffer = bufferFlag || false,            // function returns values between 0 and 1
       bufferCalls = bufferCalls || 10,
-      fetchedData = { high: 0, low: 1 };
+      fetchedData = fetchedData || { high: 0, low: 1 };
 
   var calibrate = new RSVP.defer(),
       promise = calibrate.promise;
