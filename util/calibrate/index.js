@@ -1,14 +1,6 @@
-//TODO: Add event interface
-
-
-
-
 var util = require('util'),
     EventEmitter = require('events').EventEmitter,
     RSVP = require('rsvp');
-
-
-
 
 function Calibrate(){
 
@@ -29,9 +21,8 @@ function Calibrate(){
       }
 
       var notBuffer   = options.returnsSingle,            
-          bufferCalls = options.call,
+          bufferCalls = options.calls,
           fetchedData = { high: options.thresholds.low, low: options.thresholds.high }; // reverse values for threshold test 
-                        
 
       var calibrate = new RSVP.defer(),
           promise = calibrate.promise;
@@ -52,7 +43,6 @@ function Calibrate(){
               if (err){
                 reject(err);
               } else {
-                console.log('resolved', data);
                 resolve(data);
               }
             });
@@ -68,11 +58,11 @@ function Calibrate(){
       }
 
       function threshold(arr){
-        console.log('threshold called', arr);
         for (var i = 0, l = arr.length; i < l; i++){
             (arr[i] < fetchedData.low) && (fetchedData.low = arr[i]);
             (arr[i] > fetchedData.high) && (fetchedData.high = arr[i]);
         }
+        fetchedData['buffer'] = arr;
         self.emit('calibrated', fetchedData); // emit event for those who prefer event interface
         return fetchedData;     // return data for those using .then()
       }
@@ -95,9 +85,4 @@ function Calibrate(){
 
 
 util.inherits(Calibrate, EventEmitter);
-
-var calibrate = new Calibrate();
-
-
-// exports.events = new Calibrate();
 module.exports = new Calibrate();
